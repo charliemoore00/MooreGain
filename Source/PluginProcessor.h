@@ -52,10 +52,12 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    //volume control for gain slider - public so editor can access it
+    double rawVolume;
 
 private:
     //==============================================================================
-    
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MooreGainAudioProcessor)
 };

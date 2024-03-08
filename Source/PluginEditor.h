@@ -14,7 +14,8 @@
 //==============================================================================
 /**
 */
-class MooreGainAudioProcessorEditor  : public juce::AudioProcessorEditor//, private juce::Slider::Listener //inheritence for gain
+class MooreGainAudioProcessorEditor  : public juce::AudioProcessorEditor, 
+                                       private juce::Slider::Listener //for gain knob
 {
 public:
     MooreGainAudioProcessorEditor (MooreGainAudioProcessor&);
@@ -23,13 +24,16 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    void sliderValueChanged(juce::Slider* slider) override; //default callback function
 
 private:
+    
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     MooreGainAudioProcessor& audioProcessor;
     
-    juce::Slider gain; //create gain slider
+    juce::Slider gainSlider; //create gain slider
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MooreGainAudioProcessorEditor)
 };
