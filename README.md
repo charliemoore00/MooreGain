@@ -1,3 +1,3 @@
 # Moore Gain
 
-Simple gain plugin [to be] compatible with industry-standard DAWs.
+Simple gain plugin compatible with industry-standard DAWs.
