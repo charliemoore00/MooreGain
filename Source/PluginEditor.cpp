@@ -13,14 +13,23 @@
 MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
+    
+    //get our background image - returns type image
+    auto backgroundImage = juce::ImageCache::getFromMemory(BinaryData::IMG_1325_jpeg, BinaryData::IMG_1325_jpegSize);
+    
+    if (! backgroundImage.isNull())
+    {
+        mImageComponent.setImage(backgroundImage, juce::RectanglePlacement::stretchToFit);
+    }
+    
+
+    
     setSize (200, 300);
     
     
     //define gain knob
     gainSlider.setSliderStyle(juce::Slider::LinearVertical);
-    gainSlider.setRange(0, 6, 0.1); //Simulating an Ableton mixing slider
+    gainSlider.setRange(0, 6, 0.01); //Simulating an Ableton mixing slider
                                     // after adjusting mathematically, should read -60 to 6
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxRight, true, 100, 25);
     gainSlider.setPopupDisplayEnabled(true, true, this);

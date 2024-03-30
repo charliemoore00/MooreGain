@@ -12,6 +12,10 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="ctJjrA" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <GROUP id="{83E851F2-2397-06F9-9A63-1D96DE460A14}" name="Resources">
+      <FILE id="xvSRVe" name="IMG_1325.jpeg" compile="0" resource="1" file="Resources/IMG_1325.jpeg"
+            xcodeResource="1"/>
+    </GROUP>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

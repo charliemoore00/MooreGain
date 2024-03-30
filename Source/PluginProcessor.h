@@ -53,6 +53,10 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
+    
+    //==============================================================================
+    //CHARLIE MOORE CODE
+    
     //volume control for gain slider - public so editor can access it
     double rawVolume;
 

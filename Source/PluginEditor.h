@@ -29,8 +29,11 @@ public:
 
 private:
     
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    //==============================================================================
+    //CHARLIE MOORE CODE
+    juce::ImageComponent mImageComponent;
+    
+    //quick way for the editor to access the processor object that created it.
     MooreGainAudioProcessor& audioProcessor;
     
     juce::Slider gainSlider; //create gain slider
