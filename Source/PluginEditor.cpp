@@ -26,6 +26,9 @@ MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProc
     
     setSize (200, 300);
     
+    //attaches treeState to gainSlider
+    sliderAttach = new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.treeState, GAIN_ID, gainSlider);
+    
     
     //define gain knob
     gainSlider.setSliderStyle(juce::Slider::LinearVertical);

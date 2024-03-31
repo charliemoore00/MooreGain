@@ -19,9 +19,21 @@ MooreGainAudioProcessor::MooreGainAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+        rawVolume(0.5f),
+        treeState(*this, nullptr)
+
 #endif
 {
+    //create variable for the range of gain
+    juce::NormalisableRange<float> gainRange (0.0f, 1.0f);
+    //create var for default value of gain
+    float defaultValue = 0.5f;
+    
+    //create and add parameter
+    //TODO: switch code to JUCE official documentation - check forum
+    treeState.createAndAddParameter(GAIN_ID, GAIN_NAME, GAIN_NAME, gainRange, defaultValue, nullptr, nullptr);
+    
 }
 
 MooreGainAudioProcessor::~MooreGainAudioProcessor()

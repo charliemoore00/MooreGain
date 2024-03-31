@@ -9,6 +9,8 @@
 #pragma once
 
 #include <JuceHeader.h>
+#define GAIN_ID "gain"
+#define GAIN_NAME "Gain"
 
 //==============================================================================
 /**
@@ -59,6 +61,9 @@ public:
     
     //volume control for gain slider - public so editor can access it
     double rawVolume;
+    
+    //for plugin parameters for automation from DAW
+    juce::AudioProcessorValueTreeState treeState;
 
 private:
     //==============================================================================
