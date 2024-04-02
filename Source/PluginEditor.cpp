@@ -32,12 +32,12 @@ MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProc
     
     //define gain knob
     gainSlider.setSliderStyle(juce::Slider::LinearVertical);
-    gainSlider.setRange(0, 6, 0.01); //Simulating an Ableton mixing slider
-                                    // after adjusting mathematically, should read -60 to 6
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxRight, true, 100, 25);
     gainSlider.setPopupDisplayEnabled(true, true, this);
     gainSlider.setTitle("Gain");
-    gainSlider.setValue(1);
+    gainSlider.setRange(-60.0, 0.0, 0.01); //Want to simulate an Ableton mixing slider
+                                    // after adjusting mathematically, hopefully should read -60 to 6
+    gainSlider.setValue(INIT_GAIN);
     
     //add a listener to the slider
     gainSlider.addListener(this);

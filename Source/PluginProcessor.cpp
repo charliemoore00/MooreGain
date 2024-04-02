@@ -20,19 +20,20 @@ MooreGainAudioProcessor::MooreGainAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-        rawVolume(0.5f),
+        rawVolume(INIT_GAIN),
         treeState(*this, nullptr)
 
 #endif
 {
     //create variable for the range of gain
-    juce::NormalisableRange<float> gainRange (0.0f, 1.0f);
+    juce::NormalisableRange<float> gainRange (-60.0, 0.0);
     //create var for default value of gain
-    float defaultValue = 0.5f;
+    float defaultValue = INIT_GAIN;
     
     //create and add parameter
     //TODO: switch code to JUCE official documentation - check forum
     treeState.createAndAddParameter(GAIN_ID, GAIN_NAME, GAIN_NAME, gainRange, defaultValue, nullptr, nullptr);
+    treeState.state = juce::ValueTree("saved parameters");
     
 }
 
@@ -162,7 +163,8 @@ void MooreGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         //iterate through ALL the samples in the buffer
         for(int sample = 0; sample < buffer.getNumSamples(); sample++)
         {
-            channelData[sample] = buffer.getSample(channel, sample) * rawVolume;
+            channelData[sample] = buffer.getSample(channel, sample) * (pow (10, rawVolume / 20));
+                                                                        //make it logarithmic
         }
     }
 }
@@ -184,12 +186,30 @@ void MooreGainAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    
+    //create a copy of the AudioProcessorValueTreeState
+    auto state = treeState.copyState();
+    //create a dynamic pointer for the new xml for state information
+    std::unique_ptr<juce::XmlElement> xml (state.createXml());
+    copyXmlToBinary(*xml, destData);
+    
 }
 
 void MooreGainAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    
+    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+    
+    //do some error checking for safety
+    if (xmlState.get() != nullptr)
+    {
+        if (xmlState->hasTagName(treeState.state.getType()))
+        {
+            treeState.replaceState(juce::ValueTree::fromXml(*xmlState));
+        }
+    }
 }
 
 //==============================================================================

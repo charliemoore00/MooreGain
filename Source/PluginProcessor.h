@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #define GAIN_ID "gain"
 #define GAIN_NAME "Gain"
+#define INIT_GAIN -5.0
 
 //==============================================================================
 /**
