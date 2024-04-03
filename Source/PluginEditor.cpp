@@ -13,7 +13,7 @@
 MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    
+    /* BACKGROUND IMAGE
     //get our background image - returns type image
     auto backgroundImage = juce::ImageCache::getFromMemory(BinaryData::IMG_1325_jpeg, BinaryData::IMG_1325_jpegSize);
     
@@ -21,13 +21,15 @@ MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProc
     {
         mImageComponent.setImage(backgroundImage, juce::RectanglePlacement::stretchToFit);
     }
+     */
+    
+    
+    //allocates momery for the slider attachment
+    sliderValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, GAIN_ID, gainSlider);
     
 
     
     setSize (200, 300);
-    
-    //attaches treeState to gainSlider
-    sliderAttach = new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.treeState, GAIN_ID, gainSlider);
     
     
     //define gain knob
@@ -44,6 +46,7 @@ MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProc
     
     //add to editor
     addAndMakeVisible(&gainSlider);
+    
     
 }
 

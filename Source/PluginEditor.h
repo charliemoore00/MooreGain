@@ -29,12 +29,9 @@ public:
     //CHARLIE MOORE CODE
     
     void sliderValueChanged(juce::Slider* slider) override; //default callback function
+        //still need this?
     
-    //slider attachment for parameter interaction with DAW
-    juce::ScopedPointer <juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttach;
-    //TODO: use std::unique_ptr because ScopedPointer is deprecated
-    //std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttach;
-    //sliderAttach = std::make_unique <juce::AudioProcessorValueTreeState:SliderAttachment> ("Gain");
+    
     
 
 private:
@@ -42,7 +39,9 @@ private:
     //==============================================================================
     //CHARLIE MOORE CODE
     
+    /*  FOR BACKGROUND IMAGE
     juce::ImageComponent mImageComponent;
+     */
     
     //quick way for the editor to access the processor object that created it.
     MooreGainAudioProcessor& audioProcessor;
@@ -50,4 +49,12 @@ private:
     juce::Slider gainSlider; //create gain slider
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MooreGainAudioProcessorEditor)
+    
+public:
+    
+    /* PARAM INTEGRATION */
+    //slider attachment for parameter interaction with DAW
+    std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> sliderValue;
+
+    
 };

@@ -21,20 +21,17 @@ MooreGainAudioProcessor::MooreGainAudioProcessor()
                      #endif
                        ),
         rawVolume(INIT_GAIN),
-        treeState(*this, nullptr)
+        treeState(*this, nullptr, "PARAMETERS", {
+                std::make_unique<juce::AudioParameterFloat>(GAIN_ID, GAIN_NAME, -60.0f, 0.0f, -5.0f)
+        })
 
 #endif
 {
-    //create variable for the range of gain
-    juce::NormalisableRange<float> gainRange (-60.0, 0.0);
-    //create var for default value of gain
-    float defaultValue = INIT_GAIN;
     
-    //create and add parameter
-    //TODO: switch code to JUCE official documentation - check forum
-    treeState.createAndAddParameter(GAIN_ID, GAIN_NAME, GAIN_NAME, gainRange, defaultValue, nullptr, nullptr);
-    treeState.state = juce::ValueTree("saved parameters");
+    /* PARAM INTEGRATION */
+    //juce::NormalisableRange<float> gainRange (-60.0, 0.0);
     
+     
 }
 
 MooreGainAudioProcessor::~MooreGainAudioProcessor()
@@ -106,8 +103,7 @@ void MooreGainAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void MooreGainAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    previousGain = rawVolume;
 }
 
 void MooreGainAudioProcessor::releaseResources()
@@ -145,6 +141,22 @@ bool MooreGainAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 void MooreGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     
+    /* POTENTIAL GAIN SMOOTHING - DOES NOT WORK RN */
+    /*
+    auto currentGain = rawVolume;
+    
+    if (juce::approximatelyEqual(static_cast<float>(previousGain), static_cast<float>(currentGain)))
+    {
+        buffer.applyGain(pow (10, currentGain / 20));
+    }
+    else
+    {
+        buffer.applyGainRamp(0, buffer.getNumSamples(), previousGain, currentGain);
+        previousGain = currentGain;
+    }
+    */
+    
+    
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -163,10 +175,12 @@ void MooreGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
         //iterate through ALL the samples in the buffer
         for(int sample = 0; sample < buffer.getNumSamples(); sample++)
         {
-            channelData[sample] = buffer.getSample(channel, sample) * (pow (10, rawVolume / 20));
-                                                                        //make it logarithmic
+            //actual gain processing
+            channelData[sample] = buffer.getSample(channel, sample) * juce::Decibels::decibelsToGain(rawVolume);
+                                                                            //make it logarithmic
         }
     }
+     
 }
 
 //==============================================================================
@@ -187,11 +201,23 @@ void MooreGainAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
     
+    
     //create a copy of the AudioProcessorValueTreeState
     auto state = treeState.copyState();
+    
     //create a dynamic pointer for the new xml for state information
     std::unique_ptr<juce::XmlElement> xml (state.createXml());
-    copyXmlToBinary(*xml, destData);
+    
+    if (xml != nullptr) {
+        copyXmlToBinary(*xml, destData);
+        std::cout << "copied xml to binary";
+    }
+    else
+    {
+        std::cout << "xml is null";
+    }
+    
+     
     
 }
 
@@ -200,6 +226,7 @@ void MooreGainAudioProcessor::setStateInformation (const void* data, int sizeInB
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
     
+    // LOAD STATE FROM XML
     std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
     
     //do some error checking for safety
@@ -210,6 +237,7 @@ void MooreGainAudioProcessor::setStateInformation (const void* data, int sizeInB
             treeState.replaceState(juce::ValueTree::fromXml(*xmlState));
         }
     }
+    
 }
 
 //==============================================================================

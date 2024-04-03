@@ -12,6 +12,7 @@
 #define GAIN_ID "gain"
 #define GAIN_NAME "Gain"
 #define INIT_GAIN -5.0
+#define GAIN_RANGE juce::NormalisableRange<float>gainRange(-60.0, 0.0);
 
 //==============================================================================
 /**
@@ -63,8 +64,12 @@ public:
     //volume control for gain slider - public so editor can access it
     double rawVolume;
     
+    //previousGain for gain smoothing in process block
+    float previousGain;
+    
     //for plugin parameters for automation from DAW
     juce::AudioProcessorValueTreeState treeState;
+    
 
 private:
     //==============================================================================
