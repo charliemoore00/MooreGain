@@ -14,8 +14,8 @@
 //==============================================================================
 /**
 */
-class MooreGainAudioProcessorEditor  : public juce::AudioProcessorEditor, 
-                                       private juce::Slider::Listener //for gain knob
+class MooreGainAudioProcessorEditor  : public juce::AudioProcessorEditor
+                                       //private juce::Slider::Listener //for gain knob
 {
 public:
     MooreGainAudioProcessorEditor (MooreGainAudioProcessor&);
@@ -24,15 +24,6 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-    
-    //==============================================================================
-    //CHARLIE MOORE CODE
-    
-    void sliderValueChanged(juce::Slider* slider) override; //default callback function
-        //still need this?
-    
-    
-    
 
 private:
     
@@ -50,10 +41,12 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MooreGainAudioProcessorEditor)
     
+    
 public:
     
     /* PARAM INTEGRATION */
     //slider attachment for parameter interaction with DAW
+    //it's down here so that it destructs before the slider does
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> sliderValue;
 
     

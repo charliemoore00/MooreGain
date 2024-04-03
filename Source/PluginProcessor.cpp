@@ -20,9 +20,8 @@ MooreGainAudioProcessor::MooreGainAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-        rawVolume(INIT_GAIN),
         treeState(*this, nullptr, "PARAMETERS", {
-                std::make_unique<juce::AudioParameterFloat>(GAIN_ID, GAIN_NAME, -60.0f, 0.0f, -5.0f)
+                std::make_unique<juce::AudioParameterFloat>(GAIN_ID, GAIN_NAME, -60.0f, 0.0f, INIT_GAIN)
         })
 
 #endif
@@ -103,7 +102,8 @@ void MooreGainAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void MooreGainAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    previousGain = rawVolume;
+    /* FOR POTENTIAL GAIN SMOOTHING - DOES NOT WORK RN */
+    //previousGain = rawVolume;
 }
 
 void MooreGainAudioProcessor::releaseResources()
@@ -156,7 +156,7 @@ void MooreGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     }
     */
     
-    
+    /*
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -180,6 +180,12 @@ void MooreGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                                                                             //make it logarithmic
         }
     }
+     */
+    
+    /* CONDENSED VERSION USING applyGain: */
+    
+    auto sliderGainValue = treeState.getRawParameterValue(GAIN_ID);
+    buffer.applyGain(juce::Decibels::decibelsToGain<float>(*sliderGainValue));
      
 }
 

@@ -28,9 +28,8 @@ MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProc
     sliderValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, GAIN_ID, gainSlider);
     
 
-    
     setSize (200, 300);
-    
+
     
     //define gain knob
     gainSlider.setSliderStyle(juce::Slider::LinearVertical);
@@ -40,9 +39,6 @@ MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProc
     gainSlider.setRange(-60.0, 0.0, 0.01); //Want to simulate an Ableton mixing slider
                                     // after adjusting mathematically, hopefully should read -60 to 6
     gainSlider.setValue(INIT_GAIN);
-    
-    //add a listener to the slider
-    gainSlider.addListener(this);
     
     //add to editor
     addAndMakeVisible(&gainSlider);
@@ -71,13 +67,4 @@ void MooreGainAudioProcessorEditor::resized()
     // subcomponents in your editor for when the window gets resized
     
     gainSlider.setBounds(getLocalBounds());
-}
-
-void MooreGainAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
-{
-    if (slider == &gainSlider)
-    {
-        //set rawVolume to what the slider sets it to - the processor will then set the gain appropriately
-        audioProcessor.rawVolume = gainSlider.getValue();
-    }
 }
