@@ -65,6 +65,9 @@ public:
     
     //for plugin parameters for automation from DAW
     juce::AudioProcessorValueTreeState treeState;
+    //for efficient parameter layout for APVTS constructor
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    
     
 
 private:

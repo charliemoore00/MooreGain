@@ -20,8 +20,9 @@ MooreGainAudioProcessor::MooreGainAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
+        //initialize AudioProcessorValueTreeState with parameters in the 'createParameterLayout()' method below
         treeState(*this, nullptr, "PARAMETERS", {
-                std::make_unique<juce::AudioParameterFloat>(GAIN_ID, GAIN_NAME, -60.0f, 0.0f, INIT_GAIN)
+                createParameterLayout()
         })
 
 #endif
@@ -38,6 +39,22 @@ MooreGainAudioProcessor::~MooreGainAudioProcessor()
 }
 
 //==============================================================================
+
+juce::AudioProcessorValueTreeState::ParameterLayout MooreGainAudioProcessor::createParameterLayout()
+{
+    //create vector of RangedAudioParameters
+    std::vector <std::unique_ptr <juce::RangedAudioParameter>> params;
+    
+    //create our gain parameter
+    auto gainParam = std::make_unique<juce::AudioParameterFloat>(GAIN_ID, GAIN_NAME, -60.0f, 0.0f, INIT_GAIN);
+    
+    //push it back (add it) to the vector
+    params.push_back(std::move(gainParam));
+    
+    return { params.begin(), params.end() };
+}
+
+
 const juce::String MooreGainAudioProcessor::getName() const
 {
     return JucePlugin_Name;
