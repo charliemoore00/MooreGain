@@ -13,6 +13,7 @@
 MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
+    
     /* BACKGROUND IMAGE
     //get our background image - returns type image
     auto backgroundImage = juce::ImageCache::getFromMemory(BinaryData::IMG_1325_jpeg, BinaryData::IMG_1325_jpegSize);
@@ -25,12 +26,10 @@ MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProc
     
     
     //allocates momery for the slider attachment
-    sliderValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, GAIN_ID, gainSlider);
+    sliderAttach = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, GAIN_ID, gainSlider);
     
-
     setSize (200, 300);
 
-    
     //define gain knob
     gainSlider.setSliderStyle(juce::Slider::LinearVertical);
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxRight, true, 100, 25);
@@ -38,11 +37,8 @@ MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProc
     gainSlider.setTitle("Gain");
     gainSlider.setRange(-60.0, 0.0, 0.01); //Want to simulate an Ableton mixing slider
                                     // after adjusting mathematically, hopefully should read -60 to 6
-    gainSlider.setValue(INIT_GAIN);
-    
     //add to editor
     addAndMakeVisible(&gainSlider);
-    
     
 }
 

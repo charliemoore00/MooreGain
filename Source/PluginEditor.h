@@ -47,7 +47,7 @@ public:
     /* PARAM INTEGRATION */
     //slider attachment for parameter interaction with DAW
     //it's down here so that it destructs before the slider does
-    std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> sliderValue;
+    std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttach;
 
     
 };

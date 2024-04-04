@@ -28,8 +28,8 @@ MooreGainAudioProcessor::MooreGainAudioProcessor()
 #endif
 {
     
-    /* PARAM INTEGRATION */
-    //juce::NormalisableRange<float> gainRange (-60.0, 0.0);
+    //add instance of ValueTree to our APVTS so that we can save & load state
+    treeState.state = juce::ValueTree("savedParams");
     
      
 }
@@ -200,7 +200,6 @@ void MooreGainAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
      */
     
     /* CONDENSED VERSION USING applyGain: */
-    
     auto sliderGainValue = treeState.getRawParameterValue(GAIN_ID);
     buffer.applyGain(juce::Decibels::decibelsToGain<float>(*sliderGainValue));
      
@@ -226,10 +225,10 @@ void MooreGainAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     
     
     //create a copy of the AudioProcessorValueTreeState
-    auto state = treeState.copyState();
+    //auto state = treeState.copyState();
     
     //create a dynamic pointer for the new xml for state information
-    std::unique_ptr<juce::XmlElement> xml (state.createXml());
+    std::unique_ptr<juce::XmlElement> xml (treeState.state.createXml());
     
     if (xml != nullptr) {
         copyXmlToBinary(*xml, destData);
@@ -257,10 +256,12 @@ void MooreGainAudioProcessor::setStateInformation (const void* data, int sizeInB
     {
         if (xmlState->hasTagName(treeState.state.getType()))
         {
-            treeState.replaceState(juce::ValueTree::fromXml(*xmlState));
+            //treeState.replaceState(juce::ValueTree::fromXml(*xmlState)); //this is JUCE implementation
+            treeState.state = juce::ValueTree::fromXml(*xmlState);
         }
     }
     
+
 }
 
 //==============================================================================
