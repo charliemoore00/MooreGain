@@ -219,13 +219,6 @@ juce::AudioProcessorEditor* MooreGainAudioProcessor::createEditor()
 //==============================================================================
 void MooreGainAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
-    
-    
-    //create a copy of the AudioProcessorValueTreeState
-    //auto state = treeState.copyState();
     
     //create a dynamic pointer for the new xml for state information
     std::unique_ptr<juce::XmlElement> xml (treeState.state.createXml());

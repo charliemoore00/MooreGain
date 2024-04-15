@@ -31,7 +31,7 @@ MooreGainAudioProcessorEditor::MooreGainAudioProcessorEditor (MooreGainAudioProc
     setSize (200, 300);
 
     //define gain knob
-    gainSlider.setSliderStyle(juce::Slider::LinearVertical);
+    gainSlider.setSliderStyle(juce::Slider::LinearHorizontal);
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxRight, true, 100, 25);
     gainSlider.setPopupDisplayEnabled(true, true, this);
     gainSlider.setTitle("Gain");
